@@ -1,4 +1,5 @@
 import os
+import io
 import joblib
 import numpy as np
 import pandas as pd
@@ -215,7 +216,9 @@ with tab1:
                 w = bar.get_width()
                 ax.text(w + 2, bar.get_y() + 0.14, f'{w:.1f}%', color='white', fontweight='bold', fontsize=9)
 
-            st.pyplot(fig, transparent=True)
+            image_buffer = io.BytesIO()
+            fig.savefig(image_buffer, format='png', transparent=True, dpi=300)
+            st.image(image_buffer.getvalue())
             plt.close(fig)
 
     st.markdown('</div>', unsafe_allow_html=True)
@@ -236,7 +239,7 @@ with tab2:
     )
 
     if os.path.exists(chart_selection[1]):
-        st.image(chart_selection[1], use_container_width=True)
+        st.image(chart_selection[1], width='stretch')
     else:
         st.info('Charts have not been generated yet. Please run python pipeline.py first.')
 
